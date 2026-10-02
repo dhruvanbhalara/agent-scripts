@@ -7,8 +7,10 @@ description: "Claude Code work routing: delegate implementation, fixing, explora
 
 ## Launch flags — read first, copy verbatim
 
-Every Codex worker, **fresh or resumed**, passes all three: Astra, high
-reasoning, **Fast service tier**. Missing Fast is the most common mistake: a
+Default every Codex worker, **fresh or resumed**, to **GPT-6 Astra, high
+reasoning, Fast service tier** (`service_tier="fast"`, sent as API `priority`).
+Ultrafast is an explicit per-launch option, never the saved default. Pass all
+three settings unless the user requests an override. Missing Fast is a common mistake: a
 2026-09-27 campaign ran eight lanes for hours on the standard tier because a
 hand-written wrapper kept `-m`/effort and dropped the Fast flags.
 
@@ -24,13 +26,40 @@ codex exec resume "$SID" --dangerously-bypass-approvals-and-sandbox \
   --enable fast_mode -c 'service_tier="fast"' -o "$OUT" -
 ```
 
-- Never hand-roll a subset. Copy these lines into any wrapper or launch
-  script; after editing a wrapper, `grep 'service_tier="fast"'` it.
-- Verify running workers: `ps -axo command | grep 'codex exec' | grep -v
-  'service_tier="fast"'` must print nothing for your workers; restart any it
-  lists.
+- Never hand-roll a subset. Copy the complete model, reasoning, and tier
+  settings into wrappers; change only the settings the user explicitly overrides.
+- Verify your workers' launch arguments against their requested settings.
+  The default tier is `fast`; an explicitly requested `ultrafast` run is valid.
 - Autoreview: `--engine codex --model gpt-6-astra --thinking high
   --codex-speed fast`.
+
+### Optional Ultrafast
+
+When requested, replace `-c 'service_tier="fast"'` with
+`-c 'service_tier="ultrafast"'` in the fresh/resume recipes. Keep Astra, high
+reasoning, `--enable fast_mode`, and the existing provider and execution policy.
+Do not promote this override into the base `config.toml` or worker defaults.
+
+For an interactive session, use the same per-launch override:
+
+```bash
+codex --no-daemon -m gpt-6-astra -c 'model_reasoning_effort="high"' \
+  --enable fast_mode -c 'service_tier="ultrafast"'
+```
+
+An optional `ultrafast.config.toml` profile in `CODEX_HOME` may instead contain
+the model, high reasoning, and Ultrafast tier; select it with
+`codex --no-daemon -p ultrafast`. It must preserve the configured provider and
+context settings. Normal launches stay Astra/high/Fast. Prefer these launch
+overrides to `/ultrafast` when preserving the default: the slash command saves
+the selected tier.
+
+The active model catalog must list `ultrafast`, and the account must support it.
+Codex can silently omit an unlisted tier; verify the actual API response tier
+before calling a run Ultrafast. After an approved custom-catalog refresh,
+`--no-daemon` loads it in a fresh process. See the official
+[configuration reference](https://developers.openai.com/codex/config-reference/)
+and [Ultrafast API guide](https://developers.openai.com/api/docs/guides/ultrafast-mode).
 
 ## Hard gate
 
