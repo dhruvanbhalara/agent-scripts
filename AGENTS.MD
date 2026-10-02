@@ -92,7 +92,7 @@
 ## Runtime Safety
 
 - Routine task-needed Crabbox/Testbox lease creation, reuse, use, and cleanup are pre-approved; never ask for confirmation to use them. Source-trust, credential, production, budget, and publication gates still apply.
-- Testbox stalls (no admission/runner within ~15 min, preempted, or timed out): fall back to direct AWS Crabbox (`--provider aws`, `cbx_` leases) for trusted source without asking; this overrides the skill's no-override default. Size timeouts for AWS latency; stop leases after use.
+- Testbox stalls (no admission/runner within ~15 min, preempted, or timed out): fall back to Crabbox `--provider aws`, or `--provider hetzner` if AWS does not provision within ~10 min (`cbx_` leases), for trusted source without asking; this overrides the skill's no-override default. Size timeouts for AWS latency; stop leases after use.
 - Low disk space: empty Trash and/or delete old caches, then push and sync across Peter's Macs and continue.
 - zsh: never variable `status`.
 - zsh multi-item loop: array. Scalar string does not word-split like bash.
