@@ -14,7 +14,7 @@ Use this when the job is:
 - "work through a remote OpenClaw bridge over SSH"
 
 Not for team.openclaw.ai: starting or inspecting Roboclaw sessions on the Team server is
-`$team-handoff` (one Gateway request as Peter through Cloudflare Access).
+`$team-handoff` from openclaw/agent-skills (one Gateway request as Peter through Cloudflare Access; operator values live in `~/.config/openclaw/team-handoff.env`).
 
 One skill. Two transports:
 
