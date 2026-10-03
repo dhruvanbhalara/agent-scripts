@@ -13,6 +13,9 @@ Use this when the job is:
 - "send this through the gateway via acp"
 - "work through a remote OpenClaw bridge over SSH"
 
+Not for team.openclaw.ai: starting or inspecting Roboclaw sessions on the Team server is
+`$team-handoff` (one Gateway request as Peter through Cloudflare Access).
+
 One skill. Two transports:
 
 1. `local`
