@@ -31,7 +31,7 @@ codex exec resume "$SID" --dangerously-bypass-approvals-and-sandbox \
 - Verify your workers' launch arguments against their requested settings.
   The default tier is `fast`; an explicitly requested `ultrafast` run is valid.
 - Autoreview: `--engine codex --model gpt-6-astra --thinking high
-  --codex-speed fast`.
+  --codex-speed fast` (`--codex-speed ultrafast` when Ultrafast is requested).
 
 ### Optional Ultrafast
 
